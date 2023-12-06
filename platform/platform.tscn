@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccs18gkqp7gry"]
+
+[ext_resource type="Texture2D" uid="uid://ynv8acspf3j8" path="res://assets/env/elementWood004.png" id="1_f32l3"]
+[ext_resource type="Texture2D" uid="uid://b5tn3dbi3465y" path="res://assets/env/elementWood015.png" id="2_omw4q"]
+
+[node name="Platform" type="StaticBody2D" groups=["platform"]]
+
+[node name="PlatformSprite" type="Node2D" parent="."]
+scale = Vector2(0.5, 0.5)
+
+[node name="LeftTriangle" type="Sprite2D" parent="PlatformSprite"]
+position = Vector2(-72, -66)
+texture = ExtResource("1_f32l3")
+
+[node name="RightTriangle" type="Sprite2D" parent="PlatformSprite"]
+position = Vector2(72, -66)
+texture = ExtResource("1_f32l3")
+flip_h = true
+
+[node name="BottomRectangle" type="Sprite2D" parent="PlatformSprite"]
+texture = ExtResource("2_omw4q")
+flip_h = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-53, -50, -54, 17, 53, 17, 53, -49, 20, -17, -20, -17)
