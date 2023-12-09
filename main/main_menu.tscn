@@ -1,0 +1,70 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdvxqjoqqklae"]
+
+[ext_resource type="Texture2D" uid="uid://bvqovmao7wnqw" path="res://assets/env/MainBG.png" id="1_r0don"]
+[ext_resource type="AudioStream" uid="uid://du2svjof2mf8t" path="res://assets/audio/birdsong.wav" id="2_wv7b1"]
+[ext_resource type="LabelSettings" uid="uid://cujrvbbeqdms" path="res://assets/fonts/main_menu_header.tres" id="3_ip622"]
+[ext_resource type="PackedScene" uid="uid://2xd8fg0f50ek" path="res://level_button/level_button.tscn" id="4_ih3p4"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_r0don")
+expand_mode = 3
+
+[node name="BirdSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_wv7b1")
+autoplay = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+rotation = 0.0349066
+theme_override_constants/margin_top = 32
+
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+text = "ANGRY ANIMALS"
+label_settings = ExtResource("3_ip622")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -50.0
+offset_right = 198.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 48
+
+[node name="LevelOneButton" parent="HBoxContainer" instance=ExtResource("4_ih3p4")]
+layout_mode = 2
+
+[node name="LevelTwoButton" parent="HBoxContainer" instance=ExtResource("4_ih3p4")]
+layout_mode = 2
+level_number = 2
+
+[node name="LevelThreeButton" parent="HBoxContainer" instance=ExtResource("4_ih3p4")]
+layout_mode = 2
+level_number = 3

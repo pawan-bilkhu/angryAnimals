@@ -64,7 +64,7 @@ func update_debug_label() -> void:
 		Utilities.vector2_to_str(_current_mouse_position),
 		_current_mouse_position_length
 	]
-	debug_string += "angular_velocity:%.1f, linear_velocity:%s, _air_time:.1f \n" % [
+	debug_string += "angular_velocity:%.1f, linear_velocity:%s, _air_time:%.1f \n" % [
 		angular_velocity,
 		Utilities.vector2_to_str(linear_velocity),
 		_air_time
@@ -87,8 +87,10 @@ func on_collide_platform() -> void:
 	var colliding_bodies = get_colliding_bodies()
 	if colliding_bodies.size() == 0:
 		return
-	if colliding_bodies[0].is_in_group(GameManager.GROUP_PLATFORM):
-		print("Platform")
+	
+	var platform: CollisionObject2D = colliding_bodies[0]
+	if platform.is_in_group(GameManager.GROUP_PLATFORM):
+		platform.destroy()
 		on_animal_die()
 		
 	

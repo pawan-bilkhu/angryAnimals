@@ -12,7 +12,8 @@ func _ready():
 
 
 func _process(delta):
-	pass
+	if Input.is_key_pressed(KEY_Q):
+		GameManager.load_main_scene()
 
 func on_animal_died() -> void:
 	var animal_sprite = animal_scene.instantiate()
