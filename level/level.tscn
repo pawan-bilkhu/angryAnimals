@@ -1,11 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://ck6jm10nuxaiw"]
+[gd_scene load_steps=6 format=3 uid="uid://ck6jm10nuxaiw"]
 
 [ext_resource type="Script" path="res://level/level.gd" id="1_dd2wk"]
 [ext_resource type="Texture2D" uid="uid://bsb7qrp5kv08w" path="res://assets/scene/colored_castle.png" id="1_j6d5s"]
+[ext_resource type="PackedScene" uid="uid://djcx350vtlut5" path="res://game_ui/game_ui.tscn" id="2_rmvdx"]
 [ext_resource type="PackedScene" uid="uid://bl3p2r1ktg802" path="res://water/water.tscn" id="4_dg8i8"]
+[ext_resource type="PackedScene" uid="uid://do0egq011ui52" path="res://launch_area/launch_area.tscn" id="5_0qw0v"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_dd2wk")
+
+[node name="GameUI" parent="." instance=ExtResource("2_rmvdx")]
 
 [node name="ColoredCastle" type="Sprite2D" parent="."]
 position = Vector2(505, 305)
@@ -13,6 +17,7 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("1_j6d5s")
 
 [node name="DebugLabel" type="Label" parent="."]
+visible = false
 offset_left = 24.0
 offset_top = 24.0
 offset_right = 424.0
@@ -30,3 +35,6 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(150, 330)
 
 [node name="Water" parent="." instance=ExtResource("4_dg8i8")]
+
+[node name="LaunchArea" parent="Water" instance=ExtResource("5_0qw0v")]
+position = Vector2(63, 370)

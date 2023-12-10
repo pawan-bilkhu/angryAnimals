@@ -3,10 +3,13 @@ extends RigidBody2D
 @onready var stretch_sound = $StretchSound
 @onready var launch_sound = $LaunchSound
 @onready var collide_sound = $CollideSound
+@onready var arrow_sprite = $ArrowSprite
+
 
 const MAXIMUM_DRAGGABLE_VECTOR: Vector2 = Vector2(0, 60)
 const MINIMUM_DRAGGABLE_VECTOR: Vector2 = Vector2(-60, 0)
 const IMPULSE_MAGNITUDE: float = 20.0
+const MAXIMUM_IMPULSE_MAGNITUDE: float = 1200.0
 const AIR_DURATION: float = 0.25
 const MINIMUM_VELOCITY_TOLERANCE: float = 0.1
 
@@ -18,14 +21,17 @@ var _starting_animal_position: Vector2 = Vector2.ZERO
 var _starting_mouse_position: Vector2 = Vector2.ZERO
 var _current_mouse_position: Vector2 = Vector2.ZERO
 # A Vector Quantity that represents the difference between the mouse starting position and it's current postion
-var _impulse: Vector2 = Vector2.ZERO
-var _air_time: float = 0
-var _current_mouse_position_length: float = 0
+var _launch_vector: Vector2 = Vector2.ZERO
+var _air_time: float = 0.0
+var _arrow_scale_x: float = 0.0
+var _current_mouse_position_length: float = 0.0
 var _last_collision_count: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_starting_animal_position = global_position
+	_arrow_scale_x = arrow_sprite.scale.x
+	arrow_sprite.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,10 +61,10 @@ func update_debug_label() -> void:
 		_dragging_mouse,
 		_release_mouse
 	]
-	debug_string += "_starting_animal_position:%s, _starting_mouse_position:%s, _impulse:%s \n" % [
+	debug_string += "_starting_animal_position:%s, _starting_mouse_position:%s, _launch_vector:%s \n" % [
 		Utilities.vector2_to_str(_starting_animal_position),
 		Utilities.vector2_to_str(_starting_mouse_position),
-		Utilities.vector2_to_str(_impulse)
+		Utilities.vector2_to_str(_launch_vector)
 	]
 	debug_string += "_current_mouse_position:%s, _current_mouse_position_length:%.1f \n" % [
 		Utilities.vector2_to_str(_current_mouse_position),
@@ -70,7 +76,15 @@ func update_debug_label() -> void:
 		_air_time
 	]
 	SignalManager.on_update_debug_label.emit(debug_string)
+
+func set_arrow_scale_and_rotation() -> void:
+	var launch_vector_length = get_launch_vector().length()
+	var launch_vector_proportion = launch_vector_length/MAXIMUM_IMPULSE_MAGNITUDE
 	
+	arrow_sprite.scale.x = (_arrow_scale_x * launch_vector_proportion) + _arrow_scale_x
+	arrow_sprite.rotation = (_starting_animal_position - global_position).angle()
+
+
 func on_animal_rolling_halt() -> bool:
 	if get_contact_count() > 0:
 		if (
@@ -104,39 +118,43 @@ func on_mouse_down() -> void:
 	_dragging_mouse = true
 	_starting_mouse_position = get_global_mouse_position()
 	_current_mouse_position = _starting_mouse_position
+	arrow_sprite.show()
 	
 func on_mouse_drag() -> void:
 	var global_mouse_position = get_global_mouse_position()
 	_current_mouse_position_length = (_current_mouse_position - global_mouse_position).length()
 	_current_mouse_position = global_mouse_position
-	_impulse = global_mouse_position - _starting_mouse_position
+	_launch_vector = global_mouse_position - _starting_mouse_position
 	
 	if _current_mouse_position_length > 0 and not stretch_sound.playing:
 		stretch_sound.play()
 		
-	_impulse.x = clampf(
-		_impulse.x,
+	_launch_vector.x = clampf(
+		_launch_vector.x,
 		MINIMUM_DRAGGABLE_VECTOR.x,
 		MAXIMUM_DRAGGABLE_VECTOR.x
 	)
-	_impulse.y = clampf(
-		_impulse.y,
+	_launch_vector.y = clampf(
+		_launch_vector.y,
 		MINIMUM_DRAGGABLE_VECTOR.y,
 		MAXIMUM_DRAGGABLE_VECTOR.y
 	)
 	
-	global_position = _starting_animal_position + _impulse
+	global_position = _starting_animal_position + _launch_vector
+	set_arrow_scale_and_rotation()
 
 func on_mouse_release() -> void:
 	_dragging_mouse = false
 	_release_mouse = true
 	freeze = false
-	apply_central_impulse(get_impulse())
+	apply_central_impulse(get_launch_vector())
 	stretch_sound.stop()
 	launch_sound.play()
+	ScoreManager.increment_attempt()
+	arrow_sprite.hide()
 
-func get_impulse() -> Vector2:
-	return _impulse * -1 * IMPULSE_MAGNITUDE
+func get_launch_vector() -> Vector2:
+	return _launch_vector * -1 * IMPULSE_MAGNITUDE
 
 func on_animal_die() -> void:
 	if _dead:
@@ -149,7 +167,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 	on_animal_die()
 
 
-func _on_input_event(viewport, event: InputEvent, shape_idx):
+func _on_input_event(_viewport, event: InputEvent, _shape_idx):
 	if _dragging_mouse or _release_mouse:
 		return
 	if event.is_action_pressed("drag"):

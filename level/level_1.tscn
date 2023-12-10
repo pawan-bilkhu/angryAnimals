@@ -7,3 +7,9 @@
 
 [node name="Platform" parent="." index="4" instance=ExtResource("2_t6673")]
 position = Vector2(487, 384)
+
+[node name="Platform2" parent="." index="5" instance=ExtResource("2_t6673")]
+position = Vector2(664, 314)
+
+[node name="Platform3" parent="." index="6" instance=ExtResource("2_t6673")]
+position = Vector2(835, 214)

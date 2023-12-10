@@ -1,0 +1,59 @@
+[gd_scene load_steps=6 format=3 uid="uid://djcx350vtlut5"]
+
+[ext_resource type="Script" path="res://game_ui/game_ui.gd" id="1_if7vs"]
+[ext_resource type="LabelSettings" uid="uid://bqr31h0748uvc" path="res://assets/fonts/LevelNumberFont.tres" id="1_kuaaq"]
+[ext_resource type="LabelSettings" uid="uid://cnmxs7yus30xt" path="res://assets/fonts/LevelNumberGameUIFont.tres" id="1_y8mek"]
+[ext_resource type="LabelSettings" uid="uid://cujrvbbeqdms" path="res://assets/fonts/main_menu_header.tres" id="2_m227r"]
+[ext_resource type="AudioStream" uid="uid://q6pn12re1etr" path="res://assets/audio/jazzyfrenchy.mp3" id="5_fwrmt"]
+
+[node name="GameUI" type="CanvasLayer"]
+script = ExtResource("1_if7vs")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="GameHUDVBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="LevelNumberLabel" type="Label" parent="MarginContainer/GameHUDVBoxContainer"]
+layout_mode = 2
+text = "LEVEL: 10"
+label_settings = ExtResource("1_y8mek")
+vertical_alignment = 1
+
+[node name="AttemptNumberLabel" type="Label" parent="MarginContainer/GameHUDVBoxContainer"]
+layout_mode = 2
+text = "ATTEMPTS: 1000"
+label_settings = ExtResource("1_y8mek")
+vertical_alignment = 1
+
+[node name="GameOverVBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="LevelCompleteLabel" type="Label" parent="MarginContainer/GameOverVBoxContainer"]
+layout_mode = 2
+text = "LEVEL COMPLETE"
+label_settings = ExtResource("2_m227r")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PressSpaceLabel" type="Label" parent="MarginContainer/GameOverVBoxContainer"]
+layout_mode = 2
+text = "PRESS SPACE"
+label_settings = ExtResource("1_kuaaq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CompletionSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_fwrmt")

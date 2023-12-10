@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://do0egq011ui52"]
+
+[ext_resource type="Texture2D" uid="uid://tshyqyinhra4" path="res://assets/env/elementStone025.png" id="1_m621d"]
+
+[node name="LaunchArea" type="Node2D"]
+
+[node name="LeftWall" type="Sprite2D" parent="."]
+scale = Vector2(0.3, 0.55)
+texture = ExtResource("1_m621d")
+
+[node name="RightWall" type="Sprite2D" parent="."]
+position = Vector2(141, 27)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_m621d")
+
+[node name="BottomWall" type="Sprite2D" parent="."]
+position = Vector2(71, 49)
+rotation = 1.5708
+scale = Vector2(0.3, 0.55)
+texture = ExtResource("1_m621d")
